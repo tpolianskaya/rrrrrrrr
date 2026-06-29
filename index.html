@@ -279,6 +279,7 @@ function buildCard(index) {
           <div class="front-back-face">
             <div class="slot-title" style="display:none;">Остался только один свободный слот</div>
             <div class="slot-time" style="display:none;">15:30 — 19:30</div>
+            <button class="btn delight-btn" type="button" style="display:none;">Восторг!</button>
             <div class="loading-wrap">
               <div class="spinner"></div>
               <div class="loading-text"></div>
@@ -418,15 +419,26 @@ scene.addEventListener('click', (e) => {
     const face = card.querySelector('.front-back-face');
     const slotTitle = face.querySelector('.slot-title');
     const slotTime = face.querySelector('.slot-time');
+    const delightBtn = face.querySelector('.delight-btn');
 
     inner.classList.add('slot-flipped');
     slotTitle.style.display = 'block';
     slotTime.style.display = 'block';
-    setTimeout(() => {
-      slotTitle.style.display = 'none';
-      slotTime.style.display = 'none';
-      startLoadingSequence(face);
-    }, 1800);
+    delightBtn.style.display = 'inline-block';
+    return;
+  }
+
+  const delightBtn = e.target.closest('.delight-btn');
+  if (delightBtn) {
+    e.stopPropagation();
+    const face = delightBtn.closest('.front-back-face');
+    const slotTitle = face.querySelector('.slot-title');
+    const slotTime = face.querySelector('.slot-time');
+
+    slotTitle.style.display = 'none';
+    slotTime.style.display = 'none';
+    delightBtn.style.display = 'none';
+    startLoadingSequence(face);
     return;
   }
 
