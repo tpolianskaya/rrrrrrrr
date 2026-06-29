@@ -274,10 +274,9 @@ function buildCard(index) {
           <div class="front-face">
             <div class="date">2 июля</div>
             <div class="date-hint">Возможно, где-то поблизости будет находиться самка леопарда, которая будет не прочь попить с тобой кофе.</div>
-            <button class="btn slot-btn" type="button">Выбрать слот</button>
+            <button class="btn invite-btn" type="button">Пригласить на капучино</button>
           </div>
           <div class="front-back-face">
-            <button class="btn invite-btn" type="button">Пригласить на капучино</button>
             <div class="slot-title" style="display:none;">Остался только один свободный слот</div>
             <div class="slot-time" style="display:none;">15:30 — 19:30</div>
             <div class="loading-wrap">
@@ -411,21 +410,16 @@ function startLoadingSequence(face) {
 }
 
 scene.addEventListener('click', (e) => {
-  const slotBtn = e.target.closest('.slot-btn');
-  if (slotBtn) {
-    e.stopPropagation();
-    const inner = slotBtn.closest('.card').querySelector('.front-inner');
-    inner.classList.add('slot-flipped');
-    return;
-  }
-
   const inviteBtn = e.target.closest('.invite-btn');
   if (inviteBtn) {
     e.stopPropagation();
-    const face = inviteBtn.closest('.front-back-face');
+    const card = inviteBtn.closest('.card');
+    const inner = card.querySelector('.front-inner');
+    const face = card.querySelector('.front-back-face');
     const slotTitle = face.querySelector('.slot-title');
     const slotTime = face.querySelector('.slot-time');
-    inviteBtn.style.display = 'none';
+
+    inner.classList.add('slot-flipped');
     slotTitle.style.display = 'block';
     slotTime.style.display = 'block';
     setTimeout(() => {
