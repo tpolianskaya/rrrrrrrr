@@ -277,10 +277,9 @@ function buildCard(index) {
             <button class="btn slot-btn" type="button">Выбрать слот</button>
           </div>
           <div class="front-back-face">
-            <div class="slot-title">Остался только один свободный слот</div>
-            <div class="slot-time">15:30 — 19:30</div>
-            <button class="btn delight-btn" type="button">Восторг!</button>
-            <button class="btn invite-btn" type="button" style="display:none;">Пригласить на капучино</button>
+            <button class="btn invite-btn" type="button">Пригласить на капучино</button>
+            <div class="slot-title" style="display:none;">Остался только один свободный слот</div>
+            <div class="slot-time" style="display:none;">15:30 — 19:30</div>
             <div class="loading-wrap">
               <div class="spinner"></div>
               <div class="loading-text"></div>
@@ -386,17 +385,11 @@ const INVITE_STEPS = [
 
 const INVITE_URL = 'https://reservationsteps.ru/rooms/index/37e9ba99-bc64-463d-ac21-4fcdd570c70c?dfrom=02-07-2026&dto=03-07-2026&padding=20&lang=ru&currency=RUB&promoCode=%D0%A1%D0%90%D0%99%D0%A2&utm_source=YandexMaps_hotel&uid=37e9ba99-bc64-463d-ac21-4fcdd570c70c';
 
-function runInviteSequence(face) {
-  const slotTitle = face.querySelector('.slot-title');
-  const slotTime = face.querySelector('.slot-time');
-  const inviteBtn = face.querySelector('.invite-btn');
+function startLoadingSequence(face) {
   const loadingWrap = face.querySelector('.loading-wrap');
   const loadingText = face.querySelector('.loading-text');
   const goBtn = face.querySelector('.go-btn');
 
-  slotTitle.style.display = 'none';
-  slotTime.style.display = 'none';
-  inviteBtn.style.display = 'none';
   loadingWrap.style.display = 'flex';
 
   function showStep(index) {
@@ -426,19 +419,20 @@ scene.addEventListener('click', (e) => {
     return;
   }
 
-  const delightBtn = e.target.closest('.delight-btn');
-  if (delightBtn) {
-    e.stopPropagation();
-    const inviteBtn = delightBtn.closest('.front-back-face').querySelector('.invite-btn');
-    delightBtn.style.display = 'none';
-    inviteBtn.style.display = 'inline-block';
-    return;
-  }
-
   const inviteBtn = e.target.closest('.invite-btn');
   if (inviteBtn) {
     e.stopPropagation();
-    runInviteSequence(inviteBtn.closest('.front-back-face'));
+    const face = inviteBtn.closest('.front-back-face');
+    const slotTitle = face.querySelector('.slot-title');
+    const slotTime = face.querySelector('.slot-time');
+    inviteBtn.style.display = 'none';
+    slotTitle.style.display = 'block';
+    slotTime.style.display = 'block';
+    setTimeout(() => {
+      slotTitle.style.display = 'none';
+      slotTime.style.display = 'none';
+      startLoadingSequence(face);
+    }, 1800);
     return;
   }
 
